@@ -16,6 +16,6 @@ test('get started link', async ({ page }) => {
   // Expects page to have a heading with the name of Installation.
   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
 
-  await page.waitForTimeout(5000); 
-  let x: any = "no tengo tipo";
+  await page.waitForTimeout(7000); 
+  let x: any = "no tengo tipo2222";
 });
