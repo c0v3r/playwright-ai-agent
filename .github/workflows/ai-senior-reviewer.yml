@@ -1,39 +1,30 @@
-name: "Senior QA Architect Reviewer"
+name: "AI Senior QA Architect"
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: read
   pull-requests: write
 
 jobs:
-  review:
+  ai-review:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Gemini AI Reviewer
-        uses: anc95/ChatGPT-CodeReview@v1.0.15
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run AI Review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          OPENAI_API_BASE: https://generativelanguage.googleapis.com/v1beta/openai/
-          MODEL: "gemini-2.0-flash"   # ← FIX #1: modelo válido de Gemini
-        with:
-          debug: true
-          review_item_filter: ".*\\.ts$"   # ← sólo archivos TypeScript
-          prompt: |
-            Eres un Senior Test Architect experto en Playwright y TypeScript. 
-            Tu misión es revisar este PR y dejar comentarios en las líneas que violen:
-            
-            1. **Playwright Best Practices**: Prohibido page.waitForTimeout() o sleep().
-            2. **Selectores**: Prioriza getByRole o getByTestId sobre CSS/XPath.
-            3. **Clean Code**: Naming en camelCase, tipado fuerte (no uses 'any').
-            4. **Arquitectura**: Lógica de interacción en Page Objects, no en el test.
-
-            Sé conciso. Si el código está bien, no comentes. Si hay error, explica el POR QUÉ y da un ejemplo de CÓMO corregirlo.
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node .github/scripts/review.mjs
