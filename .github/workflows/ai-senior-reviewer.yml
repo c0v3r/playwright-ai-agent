@@ -23,19 +23,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           OPENAI_API_BASE: https://generativelanguage.googleapis.com/v1beta/openai/
-          MODEL: "gpt-4o" # Mapeo interno para Gemini 1.5 Flash
+          MODEL: "gpt-4o"
         with:
-          debug: true # ACTIVADO: Para ver en el log si encuentra archivos o da error de API
-          # FILTRO SIMPLIFICADO: Toma cualquier archivo .ts o .js ignorando carpetas pesadas
-          review_item_filter: "^(?!.*(node_modules|reports|dist|package-lock)).*\\.(ts|js)$"
+          debug: true
+          review_item_filter: ".*"
           prompt: |
             Eres un Senior Test Architect experto en Playwright y TypeScript. 
-            Tu misión es revisar este PR y dejar comentarios obligatorios en las líneas que violen:
+            Tu misión es revisar este PR y dejar comentarios en las líneas que violen:
             
-            1. **Playwright Best Practices**: Prohibido el uso de page.waitForTimeout() o sleep(). Exige esperas dinámicas.
-            2. **Selectores**: Prioriza getByRole, getByTestId o getByLabel sobre selectores CSS/XPath frágiles.
-            3. **Clean Code**: Naming en camelCase para variables/métodos, y tipado fuerte. ¡PROHIBIDO el uso de 'any'!
-            4. **Arquitectura**: La lógica de locators debe estar en Page Objects, no directamente en el test.
+            1. **Playwright Best Practices**: Prohibido page.waitForTimeout() o sleep().
+            2. **Selectores**: Prioriza getByRole o getByTestId sobre CSS/XPath.
+            3. **Clean Code**: Naming en camelCase, tipado fuerte (no uses 'any').
+            4. **Arquitectura**: Lógica de interacción en Page Objects, no en el test.
 
-            Si el código tiene errores, explica el POR QUÉ de la mejora y da un ejemplo de código corregido. 
-            Sé directo y profesional.
+            Sé conciso. Si el código está bien, no comentes. Si hay error, explica el POR QUÉ y da un ejemplo de CÓMO corregirlo.
