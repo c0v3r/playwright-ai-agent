@@ -23,10 +23,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           OPENAI_API_BASE: https://generativelanguage.googleapis.com/v1beta/openai/
-          MODEL: "gpt-4o"
+          MODEL: "gemini-2.0-flash"   # ← FIX #1: modelo válido de Gemini
         with:
           debug: true
-          review_item_filter: ".*"
+          review_item_filter: ".*\\.ts$"   # ← sólo archivos TypeScript
           prompt: |
             Eres un Senior Test Architect experto en Playwright y TypeScript. 
             Tu misión es revisar este PR y dejar comentarios en las líneas que violen:
