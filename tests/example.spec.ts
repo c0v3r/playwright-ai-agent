@@ -21,4 +21,7 @@ test('get started link', async ({ page }) => {
   await page.waitForTimeout(5000); 
   //x: any = "no tengo tipo";
 await page.waitForTimeout(5000); 
+
+await page.waitForTimeout(9999); 
+let errorFinal: any = "ahora me tenes que leer"
 });
