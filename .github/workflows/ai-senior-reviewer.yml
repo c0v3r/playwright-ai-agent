@@ -1,41 +1,13 @@
-name: "Senior QA Architect Reviewer"
-
-on:
-  pull_request:
-    types: [opened, synchronize]
-
-permissions:
-  contents: read
-  pull-requests: write
-
-jobs:
-  review:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Gemini AI Reviewer
+- name: Gemini AI Reviewer
         uses: anc95/ChatGPT-CodeReview@v1.0.15
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          OPENAI_API_BASE: https://generativelanguage.googleapis.com/v1beta/openai/
-          MODEL: "gpt-4o" # Mapeo interno para Gemini 1.5 Flash
+          # CAMBIO 1: Probemos con la URL base directa de Google
+          OPENAI_API_BASE: https://generativelanguage.googleapis.com/v1beta/openai
+          # CAMBIO 2: Usemos el nombre de modelo que Google reconoce vía OpenAI
+          MODEL: "gpt-4o" 
         with:
-          debug: true # ACTIVADO: Para ver en el log si encuentra archivos o da error de API
-          # FILTRO SIMPLIFICADO: Toma cualquier archivo .ts o .js ignorando carpetas pesadas
-          review_item_filter: "^(?!.*(node_modules|reports|dist|package-lock)).*\\.(ts|js)$"
-          prompt: |
-            Eres un Senior Test Architect experto en Playwright y TypeScript. 
-            Tu misión es revisar este PR y dejar comentarios obligatorios en las líneas que violen:
-            
-            1. **Playwright Best Practices**: Prohibido el uso de page.waitForTimeout() o sleep(). Exige esperas dinámicas.
-            2. **Selectores**: Prioriza getByRole, getByTestId o getByLabel sobre selectores CSS/XPath frágiles.
-            3. **Clean Code**: Naming en camelCase para variables/métodos, y tipado fuerte. ¡PROHIBIDO el uso de 'any'!
-            4. **Arquitectura**: La lógica de locators debe estar en Page Objects, no directamente en el test.
-
-            Si el código tiene errores, explica el POR QUÉ de la mejora y da un ejemplo de código corregido. 
-            Sé directo y profesional.
+          debug: true
+          # CAMBIO 3: Quitamos el filtro regex complejo por ahora para que no haya dudas
+          review_item_filter: ".*"
