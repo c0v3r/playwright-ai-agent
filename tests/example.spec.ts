@@ -20,5 +20,5 @@ test('get started link', async ({ page }) => {
   let x: any = "no tengo tipo2222";
   await page.waitForTimeout(5000); 
   //x: any = "no tengo tipo";
-
+await page.waitForTimeout(5000); 
 });
