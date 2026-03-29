@@ -17,5 +17,5 @@ test('get started link', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
 
   await page.waitForTimeout(5000); 
-let x: any = "no tengo tipo";
+  let x: any = "no tengo tipo";
 });
