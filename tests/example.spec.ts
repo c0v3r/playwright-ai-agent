@@ -25,5 +25,5 @@ await page.waitForTimeout(5000);
 await page.waitForTimeout(9999); 
 let errorFinal: any = "ahora me tenes que leer"
 
-const lalalal = "esto es una variable que no se usa";
+const lalal1l = "esto es una variable que no se usa";
 });
